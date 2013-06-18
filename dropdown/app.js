@@ -1,21 +1,71 @@
 var Dropdown = (function () {
-    function Dropdown(elements) {
+    function Dropdown(elements, buttontext) {
         this.elements = elements;
         var _this = this;
+        this.searchquery = ko.observable('');
         this.chosenitems = ko.observableArray();
+        this.inputfocus = ko.observable(false);
         this.dropdownopen = new ko.observable(false);
+        this.focusmoved = ko.computed(function () {
+            if(!_this.inputfocus()) {
+                _this.dropdownopen(false);
+            }
+        }).extend({
+            throttle: 100
+        });
         this.itemstoshow = ko.computed(function () {
-            return _this.elements;
+            var q = _this.searchquery().toLowerCase().trim();
+            var returnarray = [];
+            if(q.length) {
+                ko.utils.arrayForEach(elements, function (item) {
+                    var index = item.toLowerCase().indexOf(q);
+                    if(index > -1) {
+                        item = item.slice(0, index) + '<b>' + item.slice(index, index + q.length) + '</b>' + item.slice(index + q.length);
+                        returnarray.push(item);
+                    }
+                });
+            } else {
+                returnarray = elements.slice(0);
+            }
+            ko.utils.arrayForEach(_this.chosenitems(), function (item) {
+                ko.utils.arrayRemoveItem(returnarray, item);
+            });
+            return returnarray.sort();
+        });
+        this.buttontext = ko.computed(function () {
+            var ci = _this.chosenitems();
+            if(ci.length > 0) {
+                return ci.toString() + '   <span class ="caret"></span>';
+            } else {
+                return buttontext ? buttontext : 'Choose item   <span class="caret"></span>';
+            }
         });
     }
+    Dropdown.prototype.keypressed = function (data, event) {
+        if(event.charCode == 13) {
+            if(this.itemstoshow().length) {
+                this.additem(this.itemstoshow()[0]);
+            }
+        } else {
+            return true;
+        }
+    };
     Dropdown.prototype.buttonclick = function () {
-        this.dropdownopen(true);
+        this.dropdownopen(!this.dropdownopen());
+        this.inputfocus(this.dropdownopen());
+        this.searchquery('');
     };
     Dropdown.prototype.additem = function (item) {
-        this.chosenitems.push(item);
+        this.chosenitems.push(item.replace('<b>', '').replace('</b>', ''));
+        this.chosenitems.sort();
+        this.searchquery('');
+        this.dropdownopen(true);
+        this.inputfocus(true);
     };
     Dropdown.prototype.removeitem = function (item) {
         this.chosenitems.remove(item);
+        this.dropdownopen(true);
+        this.inputfocus(true);
     };
     return Dropdown;
 })();
@@ -30,7 +80,10 @@ window.onload = function () {
     ko.applyBindings(vm);
 };
 var countries = [
+    "Armenia", 
     "Brazil", 
     "Canada", 
-    "Denmark"
+    "Denmark", 
+    "Bolivia"
 ];
+//@ sourceMappingURL=app.js.map

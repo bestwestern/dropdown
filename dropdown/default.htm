@@ -17,14 +17,16 @@
 
     <div id="content" data-bind="with: drop">
         <div class="btn-group" data-bind="css: { open: dropdownopen() }">
-            <button class="btn" data-bind="click: buttonclick"><span class="caret"></span></button>
+            <a class="btn" data-bind="click: buttonclick, html: buttontext" href="#"></a>
             <ul class="dropdown-menu">
+                <li>
+                    <input type="text" data-bind="value: searchquery, valueUpdate: 'keyup', hasfocus: inputfocus, event: { keypress: keypressed.bind($data) }" /></li>
                 <!-- ko foreach: chosenitems -->
-                <li><a href="#" data-bind="text: $data, click: $parent.removeitem.bind($parent, $data)"></a></li>
+                <li><a href="#" data-bind="    html: '<b>' + $data + '</b>', click: $parent.removeitem.bind($parent, $data)"></a></li>
                 <!-- /ko -->
                 <li class="divider"></li>
                 <!-- ko foreach: itemstoshow -->
-                <li><a href="#" data-bind="text: $data, click: $parent.additem.bind($parent, $data)"></a></li>
+                <li  data-bind="css: { active: $index() == 0 }"><a href="#" data-bind="    html: $data, click: $parent.additem.bind($parent, $data)"></a></li>
                 <!-- /ko -->
             </ul>
         </div>
