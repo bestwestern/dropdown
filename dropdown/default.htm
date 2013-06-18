@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <link rel="stylesheet" href="app.css" type="text/css" />
+    <script src="app.js"></script>
+    <script src="Scripts/jquery-1.9.1.js"></script>
+    <script src="Scripts/knockout-2.2.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+</head>
+<body>
+    <h1>TypeScript HTML App</h1>
+
+    <div id="content" data-bind="with: drop">
+        <div class="btn-group" data-bind="css: { open: dropdownopen() }">
+            <button class="btn" data-bind="click: buttonclick"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <!-- ko foreach: chosenitems -->
+                <li><a href="#" data-bind="text: $data, click: $parent.removeitem.bind($parent, $data)"></a></li>
+                <!-- /ko -->
+                <li class="divider"></li>
+                <!-- ko foreach: itemstoshow -->
+                <li><a href="#" data-bind="text: $data, click: $parent.additem.bind($parent, $data)"></a></li>
+                <!-- /ko -->
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>
