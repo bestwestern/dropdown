@@ -20,13 +20,13 @@
                 <li>
                     <input type="text" data-bind="value: searchquery, valueUpdate: 'keyup', hasfocus: inputfocus, event: { keypress: keypressed.bind($data) }" /></li>
                 <!-- ko foreach: chosenitems -->
-                <li><a href="#" data-bind="    html: '<b>' + $data + '</b>', click: $parent.removeitem.bind($parent, $data)"></a></li>
+                <li data-bind="click: $parent.removeitem.bind($parent, $data)"><a href="#" data-bind="    html: '<b>' + $data + '</b>'"></a></li>
                 <!-- /ko -->
                 <li class="disabled"><a href="#" data-bind="text: helptxt"></a></li>
                 <li class="divider" data-bind="visible:itemstoshow().length"></li>
                 <!-- ko foreach: itemstoshow -->
-                <li data-bind="css: { active: $index() == 0 }"><a href="#" data-bind="    html: $data, click: $parent.additem.bind($parent, $data)"></a></li>
-                <!-- /ko -->
+                <li data-bind="css: { active: $index() == 0 }, click: $parent.additem.bind($parent, $data)"><a href="#" data-bind="    html: $data"></a></li>
+                    <!-- /ko -->
             </ul>
         </div>
 
