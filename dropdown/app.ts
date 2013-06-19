@@ -11,6 +11,7 @@ class Dropdown {
     inputfocus: KnockoutObservableBool;
     focusmoved: KnockoutComputed;
     firstitem: KnockoutObservableString;
+    helptxt: KnockoutComputed;
     keypressed(data, event) {
         if (event.charCode == 13) {
             if (this.itemstoshow().length)
@@ -36,12 +37,12 @@ class Dropdown {
         this.dropdownopen(true);
         this.inputfocus(true);
     };
-    constructor(public elements: string[], buttontext?: string) {
+    constructor(public elements: string[], buttontext?: string, nomatchestxt?: string, nomoretxt?: string, entertxt?: string) {
         this.searchquery = ko.observable('');
         this.chosenitems = ko.observableArray();
         this.inputfocus = ko.observable(false);
         this.dropdownopen = new ko.observable(false);
-        this.focusmoved = ko.computed(() => {
+            this.focusmoved = ko.computed(() => {
             if (!this.inputfocus())
                 this.dropdownopen(false);
         }).extend({ throttle: 100 });
@@ -64,13 +65,24 @@ class Dropdown {
             });
             return returnarray.sort();
         });
+        this.helptxt = ko.computed(() => {
+            var noitems = this.itemstoshow().length;
+            if (this.elements.length == this.chosenitems().length)
+                return nomoretxt || 'No more items to choose from';
+            else
+                if (noitems === 0)
+                    return nomatchestxt || 'No matches found';
+                else
+                    return entertxt || 'Press enter to add the first highlighted item';
+        });
+
         this.buttontext = ko.computed(() => {
             var ci = this.chosenitems();
             if (ci.length > 0) {
                 return ci.toString() + '   <span class ="caret"></span>';
             }
             else
-                return buttontext ? buttontext : 'Choose item   <span class="caret"></span>';
+                return buttontext || 'Choose item   <span class="caret"></span>';
         });
     }
 }

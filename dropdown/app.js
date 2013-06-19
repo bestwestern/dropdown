@@ -1,5 +1,5 @@
 var Dropdown = (function () {
-    function Dropdown(elements, buttontext) {
+    function Dropdown(elements, buttontext, nomatchestxt, nomoretxt, entertxt) {
         this.elements = elements;
         var _this = this;
         this.searchquery = ko.observable('');
@@ -32,12 +32,22 @@ var Dropdown = (function () {
             });
             return returnarray.sort();
         });
+        this.helptxt = ko.computed(function () {
+            var noitems = _this.itemstoshow().length;
+            if(_this.elements.length == _this.chosenitems().length) {
+                return nomoretxt || 'No more items to choose from';
+            } else if(noitems === 0) {
+                return nomatchestxt || 'No matches found';
+            } else {
+                return entertxt || 'Press enter to add the first highlighted item';
+            }
+        });
         this.buttontext = ko.computed(function () {
             var ci = _this.chosenitems();
             if(ci.length > 0) {
                 return ci.toString() + '   <span class ="caret"></span>';
             } else {
-                return buttontext ? buttontext : 'Choose item   <span class="caret"></span>';
+                return buttontext || 'Choose item   <span class="caret"></span>';
             }
         });
     }

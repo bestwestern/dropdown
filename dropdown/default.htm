@@ -13,8 +13,6 @@
 
 </head>
 <body>
-    <h1>TypeScript HTML App</h1>
-
     <div id="content" data-bind="with: drop">
         <div class="btn-group" data-bind="css: { open: dropdownopen() }">
             <a class="btn" data-bind="click: buttonclick, html: buttontext" href="#"></a>
@@ -24,9 +22,10 @@
                 <!-- ko foreach: chosenitems -->
                 <li><a href="#" data-bind="    html: '<b>' + $data + '</b>', click: $parent.removeitem.bind($parent, $data)"></a></li>
                 <!-- /ko -->
-                <li class="divider"></li>
+                <li class="disabled"><a href="#" data-bind="text: helptxt"></a></li>
+                <li class="divider" data-bind="visible:itemstoshow().length"></li>
                 <!-- ko foreach: itemstoshow -->
-                <li  data-bind="css: { active: $index() == 0 }"><a href="#" data-bind="    html: $data, click: $parent.additem.bind($parent, $data)"></a></li>
+                <li data-bind="css: { active: $index() == 0 }"><a href="#" data-bind="    html: $data, click: $parent.additem.bind($parent, $data)"></a></li>
                 <!-- /ko -->
             </ul>
         </div>
